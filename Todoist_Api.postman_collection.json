@@ -1,0 +1,848 @@
+{
+	"info": {
+		"_postman_id": "3700dba8-f0b4-4f02-9c2d-62bab996b0ad",
+		"name": "Todoist Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Tasks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"const taskschema = {",
+							"  \"type\": \"array\",",
+							"  \"properties\": {",
+							"    \"id\": {",
+							"      \"type\": \"number\"",
+							"    },",
+							"    \"assigner\": {",
+							"      \"type\": \"number\"",
+							"    },",
+							"    \"project_id\": {",
+							"      \"type\": \"number\"",
+							"    },",
+							"    \"section_id\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"order\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"content\": {",
+							"        \"type\": \"string\"",
+							"    },",
+							"    \"completed\": {",
+							"        \"type\": \"boolean\"",
+							"    },",
+							"    \"label_ids\": {",
+							"        \"type\": \"array\"",
+							"    },",
+							"    \"priority\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"comment_count\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"creator\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"created\": {",
+							"        \"type\": \"string\"",
+							"    },",
+							"    \"url\": {",
+							"        \"type\": \"string\"",
+							"    }",
+							"  }",
+							"};",
+							"",
+							"pm.test(\"Task schema validation\", () => {",
+							"  pm.response.to.have.jsonSchema(taskschema);",
+							"});",
+							"",
+							"pm.test(\"Task content validation\", () => {",
+							"  const jsonData = pm.response.json();",
+							"  for(i=0;i<jsonData.length;i++){",
+							"      pm.expect(jsonData[i].content).to.be.a(\"string\");",
+							"  };",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}tasks",
+					"host": [
+						"{{BASE_URL}}tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Tasks Negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(403);",
+							"});",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}tasks",
+					"host": [
+						"{{BASE_URL}}tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Active Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"const taskschema = {",
+							"  \"type\": \"object\",",
+							"  \"properties\": {",
+							"    \"id\": {",
+							"      \"type\": \"number\"",
+							"    },",
+							"    \"assigner\": {",
+							"      \"type\": \"number\"",
+							"    },",
+							"    \"project_id\": {",
+							"      \"type\": \"number\"",
+							"    },",
+							"    \"section_id\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"order\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"content\": {",
+							"        \"type\": \"string\"",
+							"    },",
+							"    \"completed\": {",
+							"        \"type\": \"boolean\"",
+							"    },",
+							"    \"label_ids\": {",
+							"        \"type\": \"array\"",
+							"    },",
+							"    \"priority\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"comment_count\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"creator\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"created\": {",
+							"        \"type\": \"string\"",
+							"    },",
+							"    \"url\": {",
+							"        \"type\": \"string\"",
+							"    }",
+							"  }",
+							"};",
+							"",
+							"pm.test(\"Task schema validation\", () => {",
+							"  pm.response.to.have.jsonSchema(taskschema);",
+							"});",
+							"",
+							"pm.test(\"Task content validation\", () => {",
+							"  const jsonData = pm.response.json();",
+							"  pm.expect(jsonData.content).to.be.a(\"string\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}tasks/4676489957",
+					"host": [
+						"{{BASE_URL}}tasks"
+					],
+					"path": [
+						"4676489957"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Active Task Negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"  pm.response.to.have.status(404);",
+							"});",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}tasks/46764899571",
+					"host": [
+						"{{BASE_URL}}tasks"
+					],
+					"path": [
+						"46764899571"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Tasks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							"",
+							"const taskschema = {",
+							"  \"type\": \"object\",",
+							"  \"properties\": {",
+							"    \"id\": {",
+							"      \"type\": \"number\"",
+							"    },",
+							"    \"assigner\": {",
+							"      \"type\": \"number\"",
+							"    },",
+							"    \"project_id\": {",
+							"      \"type\": \"number\"",
+							"    },",
+							"    \"section_id\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"order\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"content\": {",
+							"        \"type\": \"string\"",
+							"    },",
+							"    \"completed\": {",
+							"        \"type\": \"boolean\"",
+							"    },",
+							"    \"label_ids\": {",
+							"        \"type\": \"array\"",
+							"    },",
+							"    \"priority\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"comment_count\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"creator\": {",
+							"        \"type\": \"number\"",
+							"    },",
+							"    \"created\": {",
+							"        \"type\": \"string\"",
+							"    },",
+							"    \"url\": {",
+							"        \"type\": \"string\"",
+							"    }",
+							"  }",
+							"};",
+							"",
+							"pm.test(\"Task schema validation\", () => {",
+							"  pm.response.to.have.jsonSchema(taskschema);",
+							"});",
+							"",
+							"pm.test(\"Task content validation\", () => {",
+							"  const jsonData = pm.response.json();",
+							"  pm.expect(jsonData.content).to.be.a(\"string\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"content\": \"Create task test\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}tasks",
+					"host": [
+						"{{BASE_URL}}tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Tasks Negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 on empty or invalid request\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"test\":true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}tasks",
+					"host": [
+						"{{BASE_URL}}tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"  pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"content\": \"Updte task test\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}tasks/4678645672",
+					"host": [
+						"{{BASE_URL}}tasks"
+					],
+					"path": [
+						"4678645672"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task Negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400 on empty or invalid request\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"content\": \"Updte task test\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}tasks/46786456721",
+					"host": [
+						"{{BASE_URL}}tasks"
+					],
+					"path": [
+						"46786456721"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Close Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"  pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}tasks/4678645672/close",
+					"host": [
+						"{{BASE_URL}}tasks"
+					],
+					"path": [
+						"4678645672",
+						"close"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Close Task Negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404 or non existent nor open task\", function () {",
+							"  pm.response.to.have.status(404);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}tasks/4678645672a/close",
+					"host": [
+						"{{BASE_URL}}tasks"
+					],
+					"path": [
+						"4678645672a",
+						"close"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reopen Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"  pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}tasks/4678645672/reopen",
+					"host": [
+						"{{BASE_URL}}tasks"
+					],
+					"path": [
+						"4678645672",
+						"reopen"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reopen Task Negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}tasks/4678645672/reopen",
+					"host": [
+						"{{BASE_URL}}tasks"
+					],
+					"path": [
+						"4678645672",
+						"reopen"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {",
+							"  pm.response.to.have.status(204);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}tasks/4678645672",
+					"host": [
+						"{{BASE_URL}}tasks"
+					],
+					"path": [
+						"4678645672"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Task Negative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"  pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 1000ms\", () => {",
+							"  pm.expect(pm.response.responseTime).to.be.below(1000);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}tasks/46786456721",
+					"host": [
+						"{{BASE_URL}}tasks"
+					],
+					"path": [
+						"46786456721"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
